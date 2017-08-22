@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -28,8 +29,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ServiceModule {
 
-    public static final String TOKEN_KEY= "TOKEN_KEY";
-    public static final String TOKEN_TYPE= "TOKEN_TYPE";
+    private final String baseUrl = " http://image.tmdb.org/t/p/";
+    private final String apiKey = "";
 
     @Provides
     @Singleton
@@ -45,16 +46,15 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkhttpClient(final SharedPreferences sharedPreferences) {
+    OkHttpClient provideOkhttpClient() {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
         client.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
-                    Request.Builder requestBuilder = original.newBuilder();
-                    requestBuilder.header("Authorization",sharedPreferences.getString(TOKEN_TYPE,"")+" "+sharedPreferences.getString(TOKEN_KEY,""));
-                    original = requestBuilder.build();
-                return chain.proceed(original);
+                Request request = chain.request();
+                HttpUrl url = request.url().newBuilder().addQueryParameter("api_key",apiKey).build();
+                request = request.newBuilder().url(url).build();
+                return chain.proceed(request);
             }
         });
         return client.build();
@@ -66,7 +66,7 @@ public class ServiceModule {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson)).
                         client(client)
-                .baseUrl("")
+                .baseUrl(baseUrl)
                 .build();
         return retrofit;
     }
