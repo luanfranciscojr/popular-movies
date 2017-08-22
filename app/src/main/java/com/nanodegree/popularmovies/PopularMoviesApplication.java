@@ -12,7 +12,7 @@ import com.nanodegree.popularmovies.service.module.ServiceModule;
  * Created by luan_ on 31/05/2017.
  */
 
-public class PopularMovies extends Application {
+public class PopularMoviesApplication extends Application {
 
     private ServiceComponent serviceComponent;
 

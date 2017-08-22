@@ -1,4 +1,4 @@
-package com.nanodegree.popularmovies.main.view;
+package com.nanodegree.popularmovies.main.view.Activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,9 +9,13 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.nanodegree.popularmovies.PopularMoviesApplication;
 import com.nanodegree.popularmovies.R;
+import com.nanodegree.popularmovies.main.component.DaggerMainComponent;
+import com.nanodegree.popularmovies.main.module.MainModule;
+import com.nanodegree.popularmovies.main.view.MainView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    protected void setup() {
+        DaggerMainComponent.builder().
+                serviceComponent(((PopularMoviesApplication) getApplicationContext())
+                        .getServiceComponent())
+                .mainModule(new MainModule(this)).build().inject(this);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
