@@ -22,7 +22,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Application provideApplication() {
+    public Application provideApplicatmion() {
         return mApplication;
     }
 }
