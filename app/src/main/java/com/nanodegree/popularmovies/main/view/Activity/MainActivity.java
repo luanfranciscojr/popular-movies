@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.nanodegree.popularmovies.PopularMoviesApplication;
 import com.nanodegree.popularmovies.R;
 import com.nanodegree.popularmovies.main.component.DaggerMainComponent;
+import com.nanodegree.popularmovies.main.component.MainComponent;
 import com.nanodegree.popularmovies.main.module.MainModule;
 import com.nanodegree.popularmovies.main.view.MainView;
 
@@ -35,10 +36,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     protected void setup() {
-        DaggerMainComponent.builder().
+       DaggerMainComponent.builder().
                 serviceComponent(((PopularMoviesApplication) getApplicationContext())
                         .getServiceComponent())
-                .mainModule(new MainModule(this)).build().inject(this);
+                .mainModule(new MainModule(this)).build();
+
     }
 
 

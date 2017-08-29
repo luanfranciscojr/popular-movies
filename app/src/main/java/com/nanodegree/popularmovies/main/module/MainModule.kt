@@ -2,6 +2,7 @@ package com.nanodegree.popularmovies.main.module
 
 import com.nanodegree.popularmovies.common.CustomScope
 import com.nanodegree.popularmovies.main.view.MainView
+import com.nanodegree.popularmovies.model.dto.MovieDTO
 
 import dagger.Module
 import dagger.Provides
