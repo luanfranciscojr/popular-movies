@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Movies</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_detail_movie">DetailMovie</string>
+    <string name="detail_runtime">%1$s  min</string>
+    <string name="detail_vote_avarage">%1$s/10</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/movie_item_margin_bottom"
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageMovie"
+        android:layout_width="@dimen/movie_item_image_width"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:layout_height="@dimen/movie_item_image_height" />
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/name"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/year"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_height="wrap_content" />
+</LinearLayout>

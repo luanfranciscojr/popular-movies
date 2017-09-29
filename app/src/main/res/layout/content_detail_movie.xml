@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.hiper.movies.movies.view.Activity.DetailMovieActivity"
+    tools:showIn="@layout/activity_detail_movie">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/content_detail_paddingTop"
+        android:paddingRight="@dimen/content_detail_paddingLeftRight"
+        android:paddingLeft="@dimen/content_detail_paddingLeftRight">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/imageMovie"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_toRightOf="@id/imageMovie"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/content_detail_container_marginLeft"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/year"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:id="@+id/runtime"
+                    android:textSize="15sp"
+                    android:textStyle="italic|bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:id="@+id/voteAverage"
+                    android:textSize="12sp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+        <TextView
+            android:layout_marginTop="@dimen/content_detail_overview_marginTop"
+            android:id="@+id/overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/creditsRecycler"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>
