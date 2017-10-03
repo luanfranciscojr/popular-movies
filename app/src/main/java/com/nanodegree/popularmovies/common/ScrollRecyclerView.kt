@@ -9,13 +9,11 @@ import android.nfc.tech.MifareUltralight.PAGE_SIZE
 /**
  * Created by luan_ on 02/09/2017.
  */
-open class ScrollRecyclerView(var layoutManager: GridLayoutManager, var loadMoreItemsListener: LoadMoreItemsListener): RecyclerView.OnScrollListener() {
+open class ScrollRecyclerView(private var layoutManager: GridLayoutManager, private var loadMoreItemsListener: LoadMoreItemsListener): RecyclerView.OnScrollListener() {
 
     var isLoading: Boolean = false
     var isLastPage: Boolean = false
-    override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-        super.onScrollStateChanged(recyclerView, newState)
-    }
+    override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) = super.onScrollStateChanged(recyclerView, newState)
 
     override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)

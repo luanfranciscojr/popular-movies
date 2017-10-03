@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.hiper.movies.movies.movieView.Activity.MovieActivity">
     <item
-        android:id="@+id/searchView"
+        android:id="@+id/popular"
+        app:showAsAction="never"
+        android:title="@string/menu_popular"/>
+
+    <item
+        android:id="@+id/top_rated"
         android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        android:title="Search"/>
+        app:showAsAction="never"
+        android:title="@string/menu_top_rated"/>
 </menu>

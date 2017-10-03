@@ -1,13 +1,11 @@
-package com.nanodegree.popularmovies.movies.view.Activity
+package com.nanodegree.popularmovies.movies.view.activity
 
-import android.app.SearchManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.SearchView
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.nanodegree.popularmovies.PopularMoviesApplication
 import com.nanodegree.popularmovies.R
@@ -32,9 +30,9 @@ class MovieActivity : AppCompatActivity(), MovieView, LoadMoreItemsListener, Ite
 
 
     @Inject
-    lateinit var presenter: MoviePresenter;
-    lateinit var movieAdapter: MovieAdapter;
-    lateinit var scrollRecyclerView: ScrollRecyclerView
+    lateinit var presenter: MoviePresenter
+    private lateinit var movieAdapter: MovieAdapter
+    private lateinit var scrollRecyclerView: ScrollRecyclerView
 
 
 
@@ -53,49 +51,32 @@ class MovieActivity : AppCompatActivity(), MovieView, LoadMoreItemsListener, Ite
         movieRecyclerView.layoutManager = gridLayoutManager
         val itemClickListener = this
         movieAdapter =  MovieAdapter(this,itemClickListener)
-        movieRecyclerView.adapter = movieAdapter;
+        movieRecyclerView.adapter = movieAdapter
         scrollRecyclerView = ScrollRecyclerView(gridLayoutManager,this)
         movieRecyclerView.addOnScrollListener(scrollRecyclerView)
     }
-    private fun setup() {
-        DaggerMovieComponent.builder().serviceComponent((applicationContext as PopularMoviesApplication)
-                .serviceComponent)
-                .movieModule(MovieModule(this)).build().inject(this);
+    private fun setup() =
+            DaggerMovieComponent.builder().serviceComponent((applicationContext as PopularMoviesApplication)
+                    .serviceComponent)
+                    .movieModule(MovieModule(this)).build().inject(this)
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        resetRecyclerMovies()
+        when(item.itemId){
+            R.id.popular -> presenter.loadPopularMovies()
+            R.id.top_rated -> presenter.loadTopRatedMovies()
+        }
+        return super.onOptionsItemSelected(item)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_pop_movies, menu)
-        var searchItem = menu.findItem(R.id.searchView)
-        val searchManager: SearchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager;
-        val searchView: SearchView = searchItem.getActionView() as SearchView
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        val queryTextListener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String): Boolean = true
-
-            override fun onQueryTextSubmit(query: String): Boolean {
-                resetRecyclerMovies()
-                presenter.query = query
-                presenter.search()
-                return true
-            }
-        }
-        searchView.setOnCloseListener (object:SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                loadMovies()
-                searchView.onActionViewCollapsed()
-                return  true
-            }
-
-        })
-        searchView.setOnQueryTextListener(queryTextListener)
-        return true
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_pop_movies, menu)
+        return super.onCreateOptionsMenu(menu)
     }
-
     private fun loadMovies() {
         resetRecyclerMovies()
-        presenter.loadMovies()
+        presenter.loadPopularMovies()
     }
 
     private fun resetRecyclerMovies() {
@@ -116,7 +97,7 @@ class MovieActivity : AppCompatActivity(), MovieView, LoadMoreItemsListener, Ite
     }
 
     override fun onItemClick(position: Int) {
-        val movie = movieAdapter.movieList.get(position)
+        val movie = movieAdapter.movieList[position]
         val movieDetailIntent = Intent(this, DetailMovieActivity::class.java)
         movieDetailIntent.putExtra(DetailMovieActivity.MOVIE_KEY,movie)
         startActivity(movieDetailIntent)
@@ -134,11 +115,11 @@ class MovieActivity : AppCompatActivity(), MovieView, LoadMoreItemsListener, Ite
 
     override fun loadMoreItens() {
         presenter.nextPage()
-        if(presenter.isSearchRequest){
-            presenter.search()
+        if(presenter.isTopRatedRequest){
+            presenter.loadTopRatedMovies()
 
         }else{
-            presenter.loadMovies()
+            presenter.loadPopularMovies()
         }
         scrollRecyclerView.isLastPage = presenter.isLastPage
     }

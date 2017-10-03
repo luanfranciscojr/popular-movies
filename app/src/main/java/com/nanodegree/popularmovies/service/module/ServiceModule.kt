@@ -31,20 +31,18 @@ class ServiceModule {
 
     @Provides
     @Singleton
-    internal fun provideGson(): Gson {
-        return GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .registerTypeAdapter(Date::class.java, object: JsonDeserializer<Date> {
-                    var df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-                    override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext?): Date? {
-                        try {
-                            return df.parse(json.getAsString())
-                        } catch (e: ParseException) {
-                            return null
-                        }
+    internal fun provideGson(): Gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .registerTypeAdapter(Date::class.java, object: JsonDeserializer<Date> {
+                var df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+                override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext?): Date? {
+                    try {
+                        return df.parse(json.asString)
+                    } catch (e: ParseException) {
+                        return null
                     }
+                }
 
-                }).create()
-    }
+            }).create()
 
     @Provides
     @Singleton
@@ -61,10 +59,8 @@ class ServiceModule {
 
     @Provides
     @Singleton
-    internal fun retrofit(gson: Gson, client: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gson)).client(client)
-                .baseUrl(baseUrl)
-                .build()
-    }
+    internal fun retrofit(gson: Gson, client: OkHttpClient): Retrofit = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create(gson)).client(client)
+            .baseUrl(baseUrl)
+            .build()
 }

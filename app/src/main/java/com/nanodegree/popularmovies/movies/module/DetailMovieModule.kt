@@ -15,7 +15,5 @@ class DetailMovieModule(private val mMovieView: DetailMovieView) {
 
     @Provides
     @CustomScope
-    internal fun providerMovieDetailView(): DetailMovieView {
-        return mMovieView
-    }
+    internal fun providerMovieDetailView(): DetailMovieView = mMovieView
 }
