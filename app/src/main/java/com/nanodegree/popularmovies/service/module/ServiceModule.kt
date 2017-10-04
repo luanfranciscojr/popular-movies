@@ -28,7 +28,6 @@ class ServiceModule {
     private val baseUrl = " https://api.themoviedb.org/3/"
     private val apiKey = ""
 
-
     @Provides
     @Singleton
     internal fun provideGson(): Gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
