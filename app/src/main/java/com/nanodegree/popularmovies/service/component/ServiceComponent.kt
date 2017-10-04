@@ -1,22 +1,16 @@
 package com.nanodegree.popularmovies.service.component
 
-import android.content.SharedPreferences
-
-import com.nanodegree.popularmovies.AppModule
 import com.nanodegree.popularmovies.service.module.ServiceModule
-
-import javax.inject.Singleton
-
 import dagger.Component
 import retrofit2.Retrofit
+import javax.inject.Singleton
+
 
 /**
- * Created by luan_ on 31/05/2017.
+ * Created by luanfernandes on 31/08/17.
  */
-
 @Singleton
-@Component(modules = arrayOf(AppModule::class, ServiceModule::class))
+@Component(modules = arrayOf(ServiceModule::class))
 interface ServiceComponent {
     fun retrofit(): Retrofit
-    fun sharedPreferences(): SharedPreferences
 }
