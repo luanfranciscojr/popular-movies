@@ -15,16 +15,16 @@ import java.util.*
 
 class CastAdapter(private val context: Context) : RecyclerView.Adapter<CastAdapter.ViewHolder>() {
 
-    internal var castList = ArrayList<CastDTO>();
+    private var castList = ArrayList<CastDTO>()
 
     override fun getItemCount(): Int = castList.size
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val cast: CastDTO = castList.get(position)
+        val cast: CastDTO = castList[position]
         holder.name.text = cast.name
         Picasso.with(context).load(ServiceModule.BASE_IMAGE_URL + "w185/" + cast.profilePath)
-                .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(holder.characterImage);
+                .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(holder.characterImage)
 
     }
 

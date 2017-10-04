@@ -2,7 +2,7 @@ package com.nanodegree.popularmovies.movies.component
 
 import com.nanodegree.popularmovies.common.CustomScope
 import com.nanodegree.popularmovies.movies.module.DetailMovieModule
-import com.nanodegree.popularmovies.movies.view.Activity.DetailMovieActivity
+import com.nanodegree.popularmovies.movies.view.activity.DetailMovieActivity
 import com.nanodegree.popularmovies.service.component.ServiceComponent
 import dagger.Component
 

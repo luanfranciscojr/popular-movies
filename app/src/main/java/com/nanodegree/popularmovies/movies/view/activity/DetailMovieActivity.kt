@@ -1,4 +1,4 @@
-package com.nanodegree.popularmovies.movies.view.Activity
+package com.nanodegree.popularmovies.movies.view.activity
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import com.nanodegree.popularmovies.PopularMoviesApplication
 import com.nanodegree.popularmovies.R
-import com.nanodegree.popularmovies.dto.CastDTO
 import com.nanodegree.popularmovies.dto.MovieDTO
 import com.nanodegree.popularmovies.dto.MovieDetailDTO
 import com.nanodegree.popularmovies.movies.component.DaggerDetailMovieComponent
@@ -31,8 +30,8 @@ open class DetailMovieActivity : AppCompatActivity(), DetailMovieView {
 
 
     @Inject
-    lateinit var presenter: DetailMoviePresenter;
-    lateinit var itemsAdapter: CastAdapter
+    lateinit var presenter: DetailMoviePresenter
+    private lateinit var itemsAdapter: CastAdapter
     private val imageWidth = "w500/"
 
     companion object {
@@ -46,50 +45,41 @@ open class DetailMovieActivity : AppCompatActivity(), DetailMovieView {
         initViews()
         val movie = intent.getParcelableExtra<MovieDTO>(MOVIE_KEY)
         presenter.loadMovieDetail(movie.id)
-        presenter.loadCast(movie.id)
         showInformations(movie)
     }
     private fun initViews(){
         setSupportActionBar(toolbar)
-        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar()!!.setDisplayShowHomeEnabled(true);
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        creditsRecycler.layoutManager = linearLayoutManager
         itemsAdapter  = CastAdapter(this)
-        creditsRecycler.adapter = itemsAdapter
-        creditsRecycler.isNestedScrollingEnabled = false
 
     }
     private fun showInformations(movie: MovieDTO) {
         collapsingToolbar.title = movie.originalTitle
         Picasso.with(this).load(ServiceModule.BASE_IMAGE_URL + "w342/" + movie.posterPath)
-                .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(imageMovie);
+                .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(imageMovie)
 
     }
 
-    private fun setup() {
-        DaggerDetailMovieComponent.builder().serviceComponent((applicationContext as PopularMoviesApplication)
-                .serviceComponent).detailMovieModule(DetailMovieModule(this)).build().inject(this)
-
-    }
+    private fun setup() =
+            DaggerDetailMovieComponent.builder().serviceComponent((applicationContext as PopularMoviesApplication)
+                    .serviceComponent).detailMovieModule(DetailMovieModule(this)).build().inject(this)
 
 
     override fun showDetailMovie(movieDetail: MovieDetailDTO) {
         Picasso.with(this)
                 .load(ServiceModule.BASE_IMAGE_URL + imageWidth + movieDetail.backdropPath)
                 .into(object : Target {
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
 
-                    }
-
-                    override fun onBitmapFailed(errorDrawable: Drawable?) {
-                    }
+                    override fun onBitmapFailed(errorDrawable: Drawable?) = Unit
 
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                         val bitmapDrawable = BitmapDrawable(resources, bitmap)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            collapsingToolbar.setBackground(bitmapDrawable)
+                            collapsingToolbar.background = bitmapDrawable
                         } else {
                             collapsingToolbar.setBackgroundDrawable(bitmapDrawable)
                         }
@@ -101,15 +91,11 @@ open class DetailMovieActivity : AppCompatActivity(), DetailMovieView {
         calendar.time = movieDetail.releaseDate
         year.text = calendar.get(Calendar.YEAR).toString()
         runtime.text = resources.getString(R.string.detail_runtime, movieDetail.runtime ?: "")
-        voteAverage.text = resources.getString(R.string.detail_vote_avarage,movieDetail.voteAverage.toString())
+        voteAverage.text = resources.getString(R.string.detail_vote,movieDetail.voteAverage.toString())
     }
 
-    override fun showCast(cast: ArrayList<CastDTO>) {
-        itemsAdapter.castList = cast
-        itemsAdapter.notifyDataSetChanged()
-    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.getItemId()
+        val id = item.itemId
 
         if (id == android.R.id.home) {
             finish()

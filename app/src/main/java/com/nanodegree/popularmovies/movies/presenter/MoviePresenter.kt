@@ -16,24 +16,23 @@ import javax.inject.Inject
 class MoviePresenter @Inject constructor(private val retrofit: Retrofit, private val view: MovieView) : Callback<GenericDTO<MovieDTO>> {
 
     var currentPage: Int = 1
-    var isSearchRequest = false
+    var isTopRatedRequest = false
     var isLastPage: Boolean = true
-    var query: String = ""
     var movies: GenericDTO<MovieDTO>? = null
 
-    fun search() {
-        isSearchRequest = true
+    fun loadTopRatedMovies() {
+        isTopRatedRequest = true
         if (isFirstPage()) {
             view.showProgress()
         }
         view.notifyIsLoading(true)
         val popularMoviesRequest: PopularMoviesRequest = retrofit.create(PopularMoviesRequest::class.java)
-        val call: Call<GenericDTO<MovieDTO>> = popularMoviesRequest.searchMovieByName(query, currentPage)
+        val call: Call<GenericDTO<MovieDTO>> = popularMoviesRequest.topReatedMovies(currentPage)
         call.enqueue(this)
     }
 
-    fun loadMovies() {
-        isSearchRequest = false
+    fun loadPopularMovies() {
+        isTopRatedRequest = false
         if (isFirstPage()) {
             view.showProgress()
         }

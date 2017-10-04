@@ -1,6 +1,5 @@
 package com.nanodegree.popularmovies.movies.presenter
 
-import com.nanodegree.popularmovies.dto.CreditsDTO
 import com.nanodegree.popularmovies.dto.MovieDetailDTO
 import com.nanodegree.popularmovies.movies.view.DetailMovieView
 import com.nanodegree.popularmovies.service.request.PopularMoviesRequest
@@ -29,27 +28,9 @@ class DetailMoviePresenter @Inject constructor(private val retrofit: Retrofit, p
         }
     }
 
-    override fun onFailure(call: Call<MovieDetailDTO>?, t: Throwable?) {
-    }
+    override fun onFailure(call: Call<MovieDetailDTO>?, t: Throwable?) = Unit
 
 
-    fun loadCast(movieId: Long) {
-        val popularMoviesRequest: PopularMoviesRequest = retrofit.create(PopularMoviesRequest::class.java)
-        val call: Call<CreditsDTO> = popularMoviesRequest.creditsMovie(movieId)
-        call.enqueue(object :Callback<CreditsDTO>{
-            override fun onResponse(call: Call<CreditsDTO>, response: Response<CreditsDTO>) {
-                if(response.isSuccessful){
-                    view.showCast(response.body().cast)
-                }
-
-            }
-
-            override fun onFailure(call: Call<CreditsDTO>?, t: Throwable?) {
-            }
-
-
-        })
-    }
 
 
 

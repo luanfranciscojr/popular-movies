@@ -16,7 +16,7 @@ import retrofit2.Retrofit
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 class MoviePresenterTest {
-    lateinit var presenter: MoviePresenter;
+    private lateinit var presenter: MoviePresenter
     @Mock
     lateinit var view: MovieView
     @Before

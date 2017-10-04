@@ -8,19 +8,19 @@ import java.util.*
  * Created by luan_ on 24/08/2017.
  */
 data class MovieDTO(var posterPath: String,
-                    var isAdult: Boolean,
-                    var overview: String,
-                    var releaseDate: Date?,
-                    var genreId: Array<Int>?,
+                    private var isAdult: Boolean,
+                    private var overview: String,
+                    private var releaseDate: Date?,
+                    private var genreId: Array<Int>?,
                     var id: Long,
                     var originalTitle: String,
-                    var originalLanguage: String,
-                    var title: String,
-                    var backdropPath: String?,
-                    var popularity: Double,
-                    var voteCount: Int,
-                    var isVideo: Boolean,
-                    var number: Int) : Parcelable {
+                    private var originalLanguage: String,
+                    private var title: String,
+                    private var backdropPath: String?,
+                    private var popularity: Double,
+                    private var voteCount: Int,
+                    private var isVideo: Boolean,
+                    private var number: Int) : Parcelable {
     constructor(source: Parcel) : this(
             source.readString(),
             1 == source.readInt(),
@@ -55,6 +55,48 @@ data class MovieDTO(var posterPath: String,
         writeInt(voteCount)
         writeInt((if (isVideo) 1 else 0))
         writeInt(number)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MovieDTO
+
+        if (posterPath != other.posterPath) return false
+        if (isAdult != other.isAdult) return false
+        if (overview != other.overview) return false
+        if (releaseDate != other.releaseDate) return false
+        if (!Arrays.equals(genreId, other.genreId)) return false
+        if (id != other.id) return false
+        if (originalTitle != other.originalTitle) return false
+        if (originalLanguage != other.originalLanguage) return false
+        if (title != other.title) return false
+        if (backdropPath != other.backdropPath) return false
+        if (popularity != other.popularity) return false
+        if (voteCount != other.voteCount) return false
+        if (isVideo != other.isVideo) return false
+        if (number != other.number) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = posterPath.hashCode()
+        result = 31 * result + isAdult.hashCode()
+        result = 31 * result + overview.hashCode()
+        result = 31 * result + (releaseDate?.hashCode() ?: 0)
+        result = 31 * result + (genreId?.let { Arrays.hashCode(it) } ?: 0)
+        result = 31 * result + id.hashCode()
+        result = 31 * result + originalTitle.hashCode()
+        result = 31 * result + originalLanguage.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + (backdropPath?.hashCode() ?: 0)
+        result = 31 * result + popularity.hashCode()
+        result = 31 * result + voteCount
+        result = 31 * result + isVideo.hashCode()
+        result = 31 * result + number
+        return result
     }
 
     companion object {

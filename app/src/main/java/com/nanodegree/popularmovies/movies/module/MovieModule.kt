@@ -15,7 +15,5 @@ class MovieModule(private val mView: MovieView) {
 
     @Provides
     @CustomScope
-    internal fun providerMovieView(): MovieView {
-        return mView
-    }
+    internal fun providerMovieView(): MovieView = mView
 }

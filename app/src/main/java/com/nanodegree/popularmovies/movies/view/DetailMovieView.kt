@@ -1,6 +1,5 @@
 package com.nanodegree.popularmovies.movies.view
 
-import com.nanodegree.popularmovies.dto.CastDTO
 import com.nanodegree.popularmovies.dto.MovieDetailDTO
 
 /**
@@ -8,5 +7,4 @@ import com.nanodegree.popularmovies.dto.MovieDetailDTO
  */
 interface DetailMovieView {
     fun showDetailMovie(movieDetail: MovieDetailDTO)
-    fun showCast(cast: ArrayList<CastDTO>)
 }
