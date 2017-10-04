@@ -2,6 +2,7 @@ package com.nanodegree.popularmovies
 
 import com.nanodegree.popularmovies.movies.presenter.MoviePresenter
 import com.nanodegree.popularmovies.movies.view.MovieView
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -32,7 +33,7 @@ class MoviePresenterTest {
         //Given
         presenter.currentPage =1
         //when
-        presenter.nextPage()
+        presenter.loadNextPage()
         //then
         assertEquals(presenter.currentPage,2)
     }
@@ -43,7 +44,7 @@ class MoviePresenterTest {
         //when
         presenter.onFailure(null,null)
         //then
-        Mockito.verify(view).notifyIsLoading(false)
+        Assert.assertTrue(presenter.isLoading)
     }
 
     @Test

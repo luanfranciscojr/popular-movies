@@ -17,7 +17,8 @@ class MoviePresenter @Inject constructor(private val retrofit: Retrofit, private
 
     var currentPage: Int = 1
     var isTopRatedRequest = false
-    var isLastPage: Boolean = true
+    var isLastPage: Boolean = false
+    var isLoading = false
     var movies: GenericDTO<MovieDTO>? = null
 
     fun loadTopRatedMovies() {
@@ -25,7 +26,7 @@ class MoviePresenter @Inject constructor(private val retrofit: Retrofit, private
         if (isFirstPage()) {
             view.showProgress()
         }
-        view.notifyIsLoading(true)
+        isLoading = true
         val popularMoviesRequest: PopularMoviesRequest = retrofit.create(PopularMoviesRequest::class.java)
         val call: Call<GenericDTO<MovieDTO>> = popularMoviesRequest.topReatedMovies(currentPage)
         call.enqueue(this)
@@ -36,7 +37,7 @@ class MoviePresenter @Inject constructor(private val retrofit: Retrofit, private
         if (isFirstPage()) {
             view.showProgress()
         }
-        view.notifyIsLoading(true)
+        isLoading = true
         val popularMoviesRequest: PopularMoviesRequest = retrofit.create(PopularMoviesRequest::class.java)
         val call: Call<GenericDTO<MovieDTO>> = popularMoviesRequest.popularMovies(currentPage)
         call.enqueue(this)
@@ -45,8 +46,8 @@ class MoviePresenter @Inject constructor(private val retrofit: Retrofit, private
 
     override fun onFailure(call: Call<GenericDTO<MovieDTO>>?, t: Throwable?) {
         if (isFirstPage()) view.hideProgress()
-        view.notifyIsLoading(false)
-        currentPage = movies?.page?:1
+        isLoading = false
+        currentPage = movies?.page ?: 1
     }
 
     override fun onResponse(call: Call<GenericDTO<MovieDTO>>, response: Response<GenericDTO<MovieDTO>>) {
@@ -55,17 +56,26 @@ class MoviePresenter @Inject constructor(private val retrofit: Retrofit, private
             view.showResult(response.body().results)
             isLastPage = movies?.totalPages == currentPage
         } else {
-            currentPage = movies?.page?:1
+            currentPage = movies?.page ?: 1
         }
-        view.notifyIsLoading(false)
+        isLoading = false
         if (isFirstPage()) view.hideProgress()
 
     }
 
-    fun nextPage() {
-        currentPage++
-    }
-
     private fun isFirstPage() = currentPage == 1
+
+    fun loadNextPage() {
+        if (isLastPage || isLoading) {
+            return
+        }
+        currentPage++
+        if (isTopRatedRequest) {
+            loadTopRatedMovies()
+        } else {
+            loadPopularMovies()
+        }
+
+    }
 
 }

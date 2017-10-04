@@ -10,7 +10,6 @@ import android.view.View
 import com.nanodegree.popularmovies.PopularMoviesApplication
 import com.nanodegree.popularmovies.R
 import com.nanodegree.popularmovies.common.ItemClickListener
-import com.nanodegree.popularmovies.common.LoadMoreItemsListener
 import com.nanodegree.popularmovies.common.ScrollRecyclerViewListener
 import com.nanodegree.popularmovies.dto.MovieDTO
 import com.nanodegree.popularmovies.movies.component.DaggerMovieComponent
@@ -26,16 +25,13 @@ import javax.inject.Inject
 /**
  * Created by luanfernandes on 31/08/17.
  */
-class MovieActivity : AppCompatActivity(), MovieView, LoadMoreItemsListener, ItemClickListener {
+class MovieActivity : AppCompatActivity(), MovieView,  ItemClickListener {
 
 
     @Inject
     lateinit var presenter: MoviePresenter
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var scrollRecyclerViewListener: ScrollRecyclerViewListener
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +48,13 @@ class MovieActivity : AppCompatActivity(), MovieView, LoadMoreItemsListener, Ite
         val itemClickListener = this
         movieAdapter =  MovieAdapter(this,itemClickListener)
         movieRecyclerView.adapter = movieAdapter
-        scrollRecyclerViewListener = ScrollRecyclerViewListener(gridLayoutManager,this)
-        movieRecyclerView.addOnScrollListener(scrollRecyclerViewListener)
+        scrollRecyclerViewListener = object:ScrollRecyclerViewListener(layoutManager = gridLayoutManager){
+            override fun nextPage() {
+                this@MovieActivity.nextPage();
+            }
+
+        };
+        movieRecyclerView.addOnScrollListener(scrollRecyclerViewListener);
     }
     private fun setup() =
             DaggerMovieComponent.builder().serviceComponent((applicationContext as PopularMoviesApplication)
@@ -104,23 +105,14 @@ class MovieActivity : AppCompatActivity(), MovieView, LoadMoreItemsListener, Ite
     }
 
 
-    override fun notifyIsLoading(isLoading: Boolean) {
-        scrollRecyclerViewListener.isLoading = isLoading
-    }
+
 
     override fun hideProgress() {
         progress.visibility = View.GONE
         movieRecyclerView.visibility = View.VISIBLE
     }
 
-    override fun loadMoreItems() {
-        presenter.nextPage()
-        if(presenter.isTopRatedRequest){
-            presenter.loadTopRatedMovies()
-
-        }else{
-            presenter.loadPopularMovies()
-        }
-        scrollRecyclerViewListener.isLastPage = presenter.isLastPage
+    fun nextPage() {
+       presenter.loadNextPage()
     }
 }

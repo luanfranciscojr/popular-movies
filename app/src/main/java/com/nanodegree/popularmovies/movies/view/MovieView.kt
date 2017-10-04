@@ -10,5 +10,4 @@ interface MovieView {
     fun showResult(movies: List<MovieDTO>)
     fun showProgress()
     fun hideProgress()
-    fun notifyIsLoading(isLoading: Boolean)
 }
