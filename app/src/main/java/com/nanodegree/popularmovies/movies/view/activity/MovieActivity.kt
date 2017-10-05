@@ -48,13 +48,14 @@ class MovieActivity : AppCompatActivity(), MovieView,  ItemClickListener {
         val itemClickListener = this
         movieAdapter =  MovieAdapter(this,itemClickListener)
         movieRecyclerView.adapter = movieAdapter
-        scrollRecyclerViewListener = object:ScrollRecyclerViewListener(layoutManager = gridLayoutManager){
-            override fun nextPage() {
-                this@MovieActivity.nextPage();
-            }
+        scrollRecyclerViewListener = object:ScrollRecyclerViewListener(gridLayoutManager,
+                {
+                    this@MovieActivity.nextPage()
+                }
+        ){}
 
-        };
-        movieRecyclerView.addOnScrollListener(scrollRecyclerViewListener);
+
+        movieRecyclerView.addOnScrollListener(scrollRecyclerViewListener)
     }
     private fun setup() =
             DaggerMovieComponent.builder().serviceComponent((applicationContext as PopularMoviesApplication)
