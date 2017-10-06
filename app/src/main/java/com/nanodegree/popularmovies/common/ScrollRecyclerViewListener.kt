@@ -12,7 +12,7 @@ open class ScrollRecyclerViewListener(private var layoutManager: GridLayoutManag
     override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
         if (dy > 0 && this.layoutManager.findLastVisibleItemPosition() == this.layoutManager.getItemCount() - 1) {
-            nextPage.invoke()
+            nextPage()
         }
 
     }

@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import com.nanodegree.popularmovies.PopularMoviesApplication
 import com.nanodegree.popularmovies.R
-import com.nanodegree.popularmovies.common.ItemClickListener
 import com.nanodegree.popularmovies.common.ScrollRecyclerViewListener
 import com.nanodegree.popularmovies.dto.MovieDTO
 import com.nanodegree.popularmovies.movies.component.DaggerMovieComponent
@@ -25,7 +24,7 @@ import javax.inject.Inject
 /**
  * Created by luanfernandes on 31/08/17.
  */
-class MovieActivity : AppCompatActivity(), MovieView,  ItemClickListener {
+class MovieActivity : AppCompatActivity(), MovieView {
 
 
     @Inject
@@ -42,21 +41,30 @@ class MovieActivity : AppCompatActivity(), MovieView,  ItemClickListener {
         loadMovies()
     }
 
-    private fun initViews(){
-        val gridLayoutManager = GridLayoutManager(this,2)
+    private fun initViews() {
+        movieAdapter = MovieAdapter(context = this, clickItem = { position ->
+            run {
+                val movie = movieAdapter.movieList[position]
+                val movieDetailIntent = Intent(this, DetailMovieActivity::class.java)
+                movieDetailIntent.putExtra(DetailMovieActivity.MOVIE_KEY, movie)
+                startActivity(movieDetailIntent)
+            }
+        })
+
+        val gridLayoutManager = GridLayoutManager(this, 2)
         movieRecyclerView.layoutManager = gridLayoutManager
-        val itemClickListener = this
-        movieAdapter =  MovieAdapter(this,itemClickListener)
         movieRecyclerView.adapter = movieAdapter
-        scrollRecyclerViewListener = object:ScrollRecyclerViewListener(gridLayoutManager,
-                {
-                    this@MovieActivity.nextPage()
+
+        scrollRecyclerViewListener = object : ScrollRecyclerViewListener(gridLayoutManager,
+                nextPage = {
+                    this@MovieActivity.presenter.loadNextPage();
                 }
-        ){}
+        ) {}
 
 
         movieRecyclerView.addOnScrollListener(scrollRecyclerViewListener)
     }
+
     private fun setup() =
             DaggerMovieComponent.builder().serviceComponent((applicationContext as PopularMoviesApplication)
                     .serviceComponent)
@@ -64,7 +72,7 @@ class MovieActivity : AppCompatActivity(), MovieView,  ItemClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         resetRecyclerMovies()
-        when(item.itemId){
+        when (item.itemId) {
             R.id.popular -> presenter.loadPopularMovies()
             R.id.top_rated -> presenter.loadTopRatedMovies()
         }
@@ -76,6 +84,7 @@ class MovieActivity : AppCompatActivity(), MovieView,  ItemClickListener {
         inflater.inflate(R.menu.menu_pop_movies, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
     private fun loadMovies() {
         resetRecyclerMovies()
         presenter.loadPopularMovies()
@@ -88,8 +97,8 @@ class MovieActivity : AppCompatActivity(), MovieView,  ItemClickListener {
 
 
     override fun showResult(movies: List<MovieDTO>) {
-      movieAdapter.movieList.addAll(movies)
-      movieAdapter.notifyDataSetChanged()
+        movieAdapter.movieList.addAll(movies)
+        movieAdapter.notifyDataSetChanged()
     }
 
     override fun showProgress() {
@@ -98,22 +107,10 @@ class MovieActivity : AppCompatActivity(), MovieView,  ItemClickListener {
 
     }
 
-    override fun onItemClick(position: Int) {
-        val movie = movieAdapter.movieList[position]
-        val movieDetailIntent = Intent(this, DetailMovieActivity::class.java)
-        movieDetailIntent.putExtra(DetailMovieActivity.MOVIE_KEY,movie)
-        startActivity(movieDetailIntent)
-    }
-
-
-
-
     override fun hideProgress() {
         progress.visibility = View.GONE
         movieRecyclerView.visibility = View.VISIBLE
     }
 
-    fun nextPage() {
-       presenter.loadNextPage()
-    }
+
 }
