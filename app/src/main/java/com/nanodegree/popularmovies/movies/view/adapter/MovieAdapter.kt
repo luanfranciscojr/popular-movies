@@ -12,7 +12,7 @@ import com.nanodegree.popularmovies.service.module.ServiceModule
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movie_item.view.*
 
-class MovieAdapter(private val context: Context, private var clickItem: (position: Int)-> Unit) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
+class MovieAdapter(private val context: Context, private var onClickItem: (position: Int)-> Unit) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     private val imageWidth = "w500/"
     internal var movieList = ArrayList<MovieDTO>()
@@ -23,7 +23,7 @@ class MovieAdapter(private val context: Context, private var clickItem: (positio
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie: MovieDTO = movieList[position]
         holder.itemView.setOnClickListener {
-            clickItem(2)
+            onClickItem(2)
         }
         Picasso.with(context).load(ServiceModule.BASE_IMAGE_URL + imageWidth + movie.posterPath)
                 .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(holder.movieImage)

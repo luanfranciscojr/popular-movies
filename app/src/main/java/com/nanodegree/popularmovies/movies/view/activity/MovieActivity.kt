@@ -42,7 +42,7 @@ class MovieActivity : AppCompatActivity(), MovieView {
     }
 
     private fun initViews() {
-        movieAdapter = MovieAdapter(context = this, clickItem = { position ->
+        movieAdapter = MovieAdapter(context = this, onClickItem = { position ->
             run {
                 val movie = movieAdapter.movieList[position]
                 val movieDetailIntent = Intent(this, DetailMovieActivity::class.java)
