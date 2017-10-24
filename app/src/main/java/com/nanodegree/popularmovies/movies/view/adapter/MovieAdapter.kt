@@ -23,7 +23,7 @@ class MovieAdapter(private val context: Context, private var onClickItem: (posit
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie: MovieDTO = movieList[position]
         holder.itemView.setOnClickListener {
-            onClickItem(2)
+            onClickItem(holder.adapterPosition)
         }
         Picasso.with(context).load(ServiceModule.BASE_IMAGE_URL + imageWidth + movie.posterPath)
                 .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(holder.movieImage)
