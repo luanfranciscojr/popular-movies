@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import com.nanodegree.popularmovies.PopularMoviesApplication
 import com.nanodegree.popularmovies.R
+import com.nanodegree.popularmovies.common.ItemClickListener
 import com.nanodegree.popularmovies.common.ScrollRecyclerViewListener
 import com.nanodegree.popularmovies.dto.MovieDTO
 import com.nanodegree.popularmovies.movies.component.DaggerMovieComponent
@@ -42,13 +43,14 @@ class MovieActivity : AppCompatActivity(), MovieView {
     }
 
     private fun initViews() {
-        movieAdapter = MovieAdapter(context = this, onClickItem = { position ->
-            run {
+        movieAdapter = MovieAdapter(this, object: ItemClickListener{
+            override fun onItemClickListener(position: Int) {
                 val movie = movieAdapter.movieList[position]
-                val movieDetailIntent = Intent(this, DetailMovieActivity::class.java)
+                val movieDetailIntent = Intent(this@MovieActivity, DetailMovieActivity::class.java)
                 movieDetailIntent.putExtra(DetailMovieActivity.MOVIE_KEY, movie)
                 startActivity(movieDetailIntent)
             }
+
         })
 
         val gridLayoutManager = GridLayoutManager(this, 2)
