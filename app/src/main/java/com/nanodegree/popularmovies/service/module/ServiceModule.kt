@@ -26,7 +26,7 @@ class ServiceModule {
     }
 
     private val baseUrl = " https://api.themoviedb.org/3/"
-    private val apiKey = ""
+    private val apiKey = "90e22adce606a0ac579f85127ab407c8"
 
     @Provides
     @Singleton
